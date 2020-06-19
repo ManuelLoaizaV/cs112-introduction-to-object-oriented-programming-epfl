@@ -45,7 +45,7 @@ int Creature::points_attaque() const {
 }
 
 void Creature::deplacer(int add) {
-  position_ += add;
+  if (vivant()) position_ += add;
 }
 
 void Creature::adieux() const {
@@ -85,7 +85,7 @@ Dragon::Dragon(string nombre, int nivel, int salud, int fuerza, int rango, int p
 : Creature(nombre, nivel, salud, fuerza, pos), portee_flamme_(rango) {}
 
 void Dragon::voler(int pos) {
-  position_ = pos;
+  if (vivant()) position_ = pos;
 }
 
 void Dragon::souffle_sur(Creature& otro) {
@@ -119,7 +119,8 @@ void Hydre::empoisonne(Creature& otro) {
   if (vivant() and otro.vivant()) {
     int d = distance(position_, otro.position());
     if (d <= longueur_cou_) {
-      otro.faiblir(points_attaque() + dose_poison_);
+      int danio = points_attaque() + dose_poison_;
+      otro.faiblir(danio);
     }
     if (not otro.vivant()) {
       niveau_++;
